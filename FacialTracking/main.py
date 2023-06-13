@@ -1,8 +1,11 @@
 # Código que utiliza un modelo entrenado en cascada para hacer un tracking de rostros en cámara
+# Code that uses a cascade trained model for face tracking in real time 
 
 # Instalar cv2 con el comando -> pip install cv2
+# Install cv2 with the command -> pip install cv2
 
 # Para cerrar la ventana de la cámara se presiona la tecla Esc
+# For closing the camera window press Esc 
 
 import cv2
 

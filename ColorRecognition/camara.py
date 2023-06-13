@@ -1,4 +1,5 @@
-#Detección de colores en tiempo real con un modelo entrenado de KNN
+# Detección de colores en tiempo real con un modelo entrenado de KNN
+# Colour detection in real time with a trained KNN model
 
 import math
 import pickle
@@ -23,6 +24,7 @@ label.pack()
 
 
 #METODO PARA CALCULAR LAS MEDIAS EN CADA ESPECTRO CON UNA VENTANA DE 5
+#METHOD FOR CALCULATE THE MEAN IN EACH SPECTRUM WITH A 5 "WINDOW"
 def media(vector):
     longitud = len(vector)
     mediaC = []
@@ -33,6 +35,7 @@ def media(vector):
     return mediaC
 
 #METODO PARA CALCULAR LAS MODAS EN CADA ESPECTRO CON UNA VENTANA DE 5
+#METHOD FOR CALCULATE THE MODE IN EACH SPECTRUM WITH A 5 "WINDOW"
 def moda(vector):
     longitud = len(vector)
     modaC = []
@@ -43,6 +46,7 @@ def moda(vector):
     return modaC
 
 #METODO PARA CALCULAR LAS MEDIANAS EN CADA ESPECTRO CON UNA VENTANA DE 5
+#METHOD FOR CALCULATE THE MEDIAN IN EACH SPECTRUM WITH A 5 "WINDOW"
 def mediana(vector):
     longitud = len(vector)
     medianaC = []
@@ -53,6 +57,7 @@ def mediana(vector):
     return medianaC
 
 #METODO PARA CALCULAR LAS DESVIACIONES ESTANDAR EN CADA ESPECTRO CON UNA VENTANA DE 5
+#METHOD FOR CALCULATE THE ESTANDAR DEVIATION IN EACH SPECTRUM WITH A 5 "WINDOW"
 def desvEstandar(vector):
     longitud = len(vector)
     desvEst = []
@@ -67,6 +72,7 @@ def desvEstandar(vector):
 
 
 #METODO PARA CALCULAR RMS (Raiz Media Cuadratica) EN CADA ESPECTRO CON UNA VENTANA DE 5
+#METHOD FOR CALCULATE THE RMS (ROOT MEAN SQUARE) IN EACH SPECTRUM WITH A 5 "WINDOW"
 def mediaCuadratica(vector):
     longitud = len(vector)
     medCuadratica = []
@@ -81,6 +87,7 @@ def mediaCuadratica(vector):
     return medCuadratica
 
 #METODO PARA CALCULAR LAS MEDIAS GEOMETRICAS EN CADA ESPECTRO CON UNA VENTANA DE 5
+#METHOD FOR CALCULATE THE GEOMETRIC MEAN IN EACH SPECTRUM WITH A 5 "WINDOW"
 def mediaGeo(vector):
     longitud = len(vector)
     mGeo = []
@@ -92,6 +99,7 @@ def mediaGeo(vector):
     return mGeo
 
 #METODO PARA CALCULAR LAS VARIANZAS EN CADA ESPECTRO CON UNA VENTANA DE 5
+#METHOD FOR CALCULATE THE VARIANCE IN EACH SPECTRUM WITH A 5 "WINDOW"
 def varianza(vector):
     longitud = len(vector)
     var = []
@@ -102,51 +110,62 @@ def varianza(vector):
     return var
 
 #CARACTERISTICAS DE UNA IMAGEN
+#IMAGE CHARACTERISTICS
 def procesamientoImagen(imagen):
     #SEPARA LA IMAGEN LOS 3 ESPECTROS
+    #SEPARE THE IMAGE IN 3 SPECTRAMES
     b, g, r = cv2.split(imagen)
 
     #SE CONVIERTE CADA ESPECTRO EN UN VECTOR
+    #CONVERTS EACH SPECTRUM IN A VECTOR
     vectorB = b.ravel()
     vectorG = g.ravel()
     vectorR = r.ravel()
 
     # CALCULO DE LAS MEDIA EN CADA ESPECTRO
+    # MEAN OF EACH SPECTRUM
     mediaB = media(vectorB)
     mediaG = media(vectorG)
     mediaR = media(vectorR)
 
     # CALCULO DE LAS MODAS EN CADA ESPECTRO
+    # MODE OF EACH SPECTRUM
     modaB = moda(vectorB)
     modaG = moda(vectorG)
     modaR = moda(vectorR)
 
     # CALCULO DE LAS MEDIANAS EN CADA ESPECTRO
+    # MEDIAN OF EACH SPECTRUM
     medianaB = mediana(vectorB)
     medianaG = mediana(vectorG)
     medianaR = mediana(vectorR)
 
     # CALCULO DE LAS DESVIACIONES ESTANDAR EN CADA ESPECTRO
+    # STANDAR DEVIATION OF EACH SPECTRUM
     desvEstandarB = desvEstandar(vectorB)
     desvEstandarG = desvEstandar(vectorG)
     desvEstandarR = desvEstandar(vectorR)
 
     # CALCULO DE LAS VARIANZAS EN CADA ESPECTRO
+    # VARIANCE OF EACH SPECTRUM
     varianzaB = varianza(vectorB)
     varianzaG = varianza(vectorG)
     varianzaR = varianza(vectorR)
 
     # CALCULO DE LAS MEDIAS GEOMETRICAS EN CADA ESPECTRO
+    # GEOMETRIC MEAN OF EACH SPECTRUM
     mediaGeoB = mediaGeo(vectorB)
     mediaGeoG = mediaGeo(vectorG)
     mediaGeoR = mediaGeo(vectorR)
 
-    # CALCULO DE LAS MEDIAS GEOMETRICAS EN CADA ESPECTRO
+    # CALCULO DE LAS MEDIAS CUADRATICAS EN CADA ESPECTRO
+    # RMS OF EACH SPECTRUM
     mediaCuaB = mediaCuadratica(vectorB)
     mediaCuaG = mediaCuadratica(vectorG)
     mediaCuaR = mediaCuadratica(vectorR)
 
     # UNION DE ESPECTROS POR FUNCION ESTADISTICA
+    # UNION OF SPECTRAMES BY STATISTICAL FUNCTION
     mediaEspectrosUnidos = unirEspectrosFuncion(mediaB, mediaR, mediaG)
     modaEspectrosUnidos = unirEspectrosFuncion(modaB, modaR, modaG)
     medianaEspectrosUnidos = unirEspectrosFuncion(medianaB, medianaR, medianaG)
@@ -161,11 +180,13 @@ def procesamientoImagen(imagen):
 
 
 #METODO PARA UNIR EN UN SOLO VECTOR LOS VECTORES DE LOS ESPECTROS
+#METHOD TO JOIN THE SPECTRUM VECTORS IN A SINGLE VECTOR
 def unirEspectrosFuncion(v1, v2, v3):
     caracteristicasImagen = v1 + v2 + v3
     return caracteristicasImagen
 
 #METODO PARA AJUSTAR EL BRILLO
+#METHOD TO ADJUST THE BRIGHTNESS
 def adjust_brightness(img, brightness_factor):
     """Ajusta el brillo de una imagen"""
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -178,15 +199,18 @@ def adjust_brightness(img, brightness_factor):
 with open('knn_model.pkl', 'rb') as file:
     clf = pickle.load(file)
 
-# Cargar la función entrenada
+# CARGAR LA FUNCIÓN ENTRENADA
+# LOAD THE TRAINED FUNCTION
 CaracteristicasSuperior = []
 CaracteristicasInferior = []
 
-# Inicializar la cámara
+# INICIAR LA CÁMARA
+# START THE CAMERA
 cap = cv2.VideoCapture(0)
 
 while(True):
-    # Capturar una imagen de la cámara
+    # CAPTURAR UNA IMAGEN DE LA CÁMARA
+    # CAPTURE A FRAME
     frames = []
     for i in range(2):
         ret, frame = cap.read()
@@ -194,26 +218,31 @@ while(True):
         frames.append(img)
 
 
-    # Preprocesar la imagen
+    # PREPROCESAR LA IMAGEN
+    # PREPROCESING THE FRAME
     for i in range(2):
         imagen = frames[i]
 
         image = adjust_brightness(imagen, 1.5)
 
-        # Dividir la imagen en dos
+        # DIVIDIR LA IMAGEN EN 2
+        # DIVIDE THE FRAME IN 2
         height, width = imagen.shape[:2]
 
 
-        # Calcular el centro de la imagen
+        # CALCULAR EL CENTRO DE LA IMAGEN
+        # CALCULATE THE CENTER OF THE FRAME
         center = (width // 2, height // 2)
 
-        # Seleccionar una área de 14x14 píxeles en el centro de la imagen
+        # SELECCIONAR UN ÁREA DE 14X14 PIXELES EN EL CENTRO DE LA IMAGEN
+        # SELECT A 14X14 PIXEL AREA IN THE CENTER OF THE FRAME
         area = img[center[1] - 7:center[1] + 7, center[0] - 7:center[0] + 7]
         area = cv2.resize(area, (20, 20))
 
 
 
-        #VECTOR DE CARACTERISTICAS DE LA IMAGEN
+        # VECTOR DE CARACTERISTICAS DE LA IMAGEN
+        # VECTOR IMAGE CHARACTERISTICS
         caracteristicasT = procesamientoImagen(area)
 
 
@@ -222,12 +251,17 @@ while(True):
 
 
 
-    # Utilizar la función entrenada para predecir el color
+    # UTILIZAR LA FUNCIÓN ENTRENADA PARA PREDECIR EL COLOR
+    # USE THE TRAINED FUNCTION TO PREDICT THE COLOR
+
     prediction = clf.predict(CaracteristicasSuperior)
 
-    #IMPRIMIR LAS ULTIMAS 3 ETIQUETAS
+    # IMPRIMIR LAS ULTIMAS 3 ETIQUETAS
+    # PRINT THE LAST 3 PREDICTIONS
 
-    # Mostrar la imagen y el resultado
+
+    # MOSTRAR LA IMAGEN Y RESULTADO
+    # SHOW THE IMAGE AND THE PREDICTION
     cv2.imshow("Camera", frame)
     print("                              ")
     print("-----------------------------")
@@ -245,7 +279,8 @@ while(True):
 
     #time.sleep(3)
 
-# Liberar la cámara y cerrar la ventana
+# CERRAR LA CAMARA
+# CLOSE THE CAMERA
 root.mainloop()
 cap.release()
 cv2.destroyAllWindows()

@@ -1,6 +1,8 @@
 # Código que convierte un archivo MP4 a MP3
+# Code that converts an MP4 file to an MP3 file
 
 # Instalar el convertidor con el comando -> pip install moviepy
+# Install the converter with the command -> pip install moviepy
 
 from moviepy.editor import VideoFileClip
 

@@ -1,6 +1,8 @@
 # Código que convierte un archivo PDF a Word
+# Code that converts an PDF file to a Word file
 
 # Instalar convertidor con el comando -> pip install pdf2docx
+# Install the converter with the command -> pip install pdf2docx
 
 from pdf2docx import Converter
 
